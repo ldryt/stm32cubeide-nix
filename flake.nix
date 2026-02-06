@@ -307,7 +307,7 @@
       in
       {
         packages = {
-          default = stm32cubeide;
+          default = stm32cubeide-fhs;
           stm32cubeide = stm32cubeide;
           stm32cubeide-fhs = stm32cubeide-fhs;
         };

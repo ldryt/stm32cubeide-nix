@@ -1,6 +1,6 @@
 # STM32CubeIDE for NixOS
 
-This Nix flake provides STM32CubeIDE 2.0.0 packaged for NixOS.
+This Nix flake provides STM32CubeIDE 1.19.0 packaged for NixOS.
 
 ## Prerequisites
 
@@ -156,26 +156,11 @@ The NixOS module automatically installs udev rules for:
 programs.stm32cubeide = {
   enable = true;              # Enable STM32CubeIDE
   package = <package>;        # Override the package (defaults to this flake's package)
-  enableStlink = true;        # Enable ST-Link udev rules (default: true)
   enableJlink = true;         # Enable J-Link udev rules (default: true)
 };
 ```
 
 ## Troubleshooting
-
-### "file not found in the Nix store" error
-
-Make sure you've added both required files to the Nix store:
-
-```bash
-# Add the main IDE tarball
-nix-store --add-fixed sha256 /path/to/st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.tar.gz
-
-# Add the ST-Link Server installer
-nix-store --add-fixed sha256 /path/to/st-stlink-server.2.1.1-1-linux-amd64.install.sh
-```
-
-See the Prerequisites section for detailed instructions on extracting these files from the STM32CubeIDE installer.
 
 ### IDE doesn't start
 
