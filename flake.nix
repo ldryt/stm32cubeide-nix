@@ -20,15 +20,15 @@
           config.allowUnfree = true;
         };
 
-        version = "2.0.0";
-        buildNumber = "26820";
-        tarballName = "st-stm32cubeide_${version}_${buildNumber}_20251114_1348_amd64.tar.gz";
+        version = "1.19.0";
+        buildNumber = "25607";
+        tarballName = "st-stm32cubeide_${version}_${buildNumber}_20250703_0907_amd64.tar.gz";
 
         # The main IDE tarball - must be obtained from STMicroelectronics
         # Download from: https://www.st.com/en/development-tools/stm32cubeide.html
         mainTarball = pkgs.requireFile {
           name = tarballName;
-          sha256 = "2aca6c65d1c85e49f4a4ac35c9cae2c1d406d7af86a9f446a41d7baffe7f8597";
+          sha256 = "18fc11e62fc575649956ed9fb477ff4541f25bd2d851d185cafebc9e7f9a9f64";
           message = ''
             STM32CubeIDE ${version} tarball not found in the Nix store.
 
@@ -37,7 +37,7 @@
 
               https://www.st.com/en/development-tools/stm32cubeide.html
 
-            1. Download the Linux installer: en.st-stm32cubeide_${version}_${buildNumber}_20251114_1348_amd64.sh.zip
+            1. Download the Linux installer: en.st-stm32cubeide_${version}_${buildNumber}_20250703_0907_amd64.sh.zip
             2. Unzip it to get the installer directory
             3. Add the tarball to the Nix store:
 
@@ -46,33 +46,6 @@
             Or if you have the file locally:
 
                nix-prefetch-url file:///path/to/${tarballName}
-          '';
-        };
-
-        # ST-Link Server installer - bundled in the main IDE download
-        stlinkServerInstallerName = "st-stlink-server.2.1.1-1-linux-amd64.install.sh";
-        stlinkServerInstaller = pkgs.requireFile {
-          name = stlinkServerInstallerName;
-          sha256 = "b5342b24384984420559855e3b3ca2a82303eee830c5494221cbeee650afbcf2";
-          message = ''
-            ST-Link Server installer not found in the Nix store.
-
-            This file is bundled with the STM32CubeIDE installer. You must extract
-            it and add it to the Nix store:
-
-            1. Download the Linux installer from:
-               https://www.st.com/en/development-tools/stm32cubeide.html
-
-            2. Unzip en.st-stm32cubeide_${version}_${buildNumber}_20251114_1348_amd64.sh.zip
-
-            3. The .sh installer is a self-extracting archive. Extract it:
-               bash st-stm32cubeide_${version}_${buildNumber}_20251114_1348_amd64.sh --noexec --target /tmp/stm32cubeide-extract
-
-            4. Find the stlink-server installer in the extracted directory:
-               /tmp/stm32cubeide-extract/${stlinkServerInstallerName}
-
-            5. Add it to the Nix store:
-               nix-store --add-fixed sha256 /tmp/stm32cubeide-extract/${stlinkServerInstallerName}
           '';
         };
 
@@ -154,9 +127,6 @@
 
           src = mainTarball;
 
-          # Include the stlink-server installer from the Nix store
-          inherit stlinkServerInstaller;
-
           nativeBuildInputs = with pkgs; [
             autoPatchelfHook
             makeWrapper
@@ -221,16 +191,16 @@
                           cp $out/opt/stm32cubeide/icon.xpm $out/share/pixmaps/stm32cubeide.xpm
                         fi
 
-                        # Install stlink-server from the separate package
-                        mkdir -p $out/opt/stlink-server
-                        bash $stlinkServerInstaller \
-                          --noexec --target $out/opt/stlink-server
+                        # # Install stlink-server from the separate package
+                        # mkdir -p $out/opt/stlink-server
+                        # bash $stlinkServerInstaller \
+                        #   --noexec --target $out/opt/stlink-server
 
-                        if [ -f $out/opt/stlink-server/stlink-server ]; then
-                          chmod +x $out/opt/stlink-server/stlink-server
-                          makeWrapper $out/opt/stlink-server/stlink-server $out/bin/stlink-server \
-                            --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [ pkgs.libusb1 ]}"
-                        fi
+                        # if [ -f $out/opt/stlink-server/stlink-server ]; then
+                        #   chmod +x $out/opt/stlink-server/stlink-server
+                        #   makeWrapper $out/opt/stlink-server/stlink-server $out/bin/stlink-server \
+                        #     --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [ pkgs.libusb1 ]}"
+                        # fi
 
                         runHook postInstall
           '';
@@ -239,7 +209,7 @@
           autoPatchelfIgnoreMissingDeps = [
             # These are bundled with the application
             "libjli.so"
-            "libSTLinkUSBDriver.so"
+            # "libSTLinkUSBDriver.so"
             "libhsmp11.so"
             "libPreparation.so.1"
             # Bundled Qt6 (for CubeProgrammer)
@@ -382,7 +352,7 @@
 
             enableStlink = lib.mkOption {
               type = lib.types.bool;
-              default = true;
+              default = false;
               description = "Enable ST-Link udev rules";
             };
 

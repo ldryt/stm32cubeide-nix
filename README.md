@@ -10,7 +10,7 @@ the installer yourself and add the tarball to the Nix store before building.
 ### Step 1: Download the installer
 
 1. Go to https://www.st.com/en/development-tools/stm32cubeide.html
-2. Download the Linux installer: `en.st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.sh.zip`
+2. Download the Linux installer: `st-stm32cubeide_1.19.0_25607_20250703_0907_amd64.sh.zip`
 3. Unzip it to get the installer `.sh` file
 
 ### Step 2: Extract the required files
@@ -18,12 +18,11 @@ the installer yourself and add the tarball to the Nix store before building.
 The downloaded `.sh` file is a self-extracting archive. Extract it to get the required files:
 
 ```bash
-bash st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.sh --noexec --target /tmp/stm32cubeide-extract
+bash st-stm32cubeide_1.19.0_25607_20250703_0907_amd64.sh --noexec --target /tmp/stm32cubeide-extract
 ```
 
 This will extract the contents to `/tmp/stm32cubeide-extract/`, which includes:
-- `st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.tar.gz` - The main IDE tarball
-- `st-stlink-server.2.1.1-1-linux-amd64.install.sh` - The ST-Link Server installer
+- `st-stm32cubeide_1.19.0_25607_20250703_0907_amd64.tar.gz` - The main IDE tarball
 
 ### Step 3: Add the files to the Nix store
 
@@ -31,16 +30,7 @@ Add both required files to the Nix store:
 
 ```bash
 # Add the main IDE tarball
-nix-store --add-fixed sha256 /tmp/stm32cubeide-extract/st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.tar.gz
-
-# Add the ST-Link Server installer
-nix-store --add-fixed sha256 /tmp/stm32cubeide-extract/st-stlink-server.2.1.1-1-linux-amd64.install.sh
-```
-
-Each command will output a store path like:
-```
-/nix/store/...-st-stm32cubeide_2.0.0_26820_20251114_1348_amd64.tar.gz
-/nix/store/...-st-stlink-server.2.1.1-1-linux-amd64.install.sh
+nix-store --add-fixed sha256 /tmp/stm32cubeide-extract/st-stm32cubeide_1.19.0_25607_20250703_0907_amd64.tar.gz
 ```
 
 ## Quick Start
